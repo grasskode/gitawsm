@@ -8,9 +8,11 @@ You will need [golang](https://golang.org/) to install **gitawsm**.
 Install golang using the instructions provided [here](https://golang.org/doc/install). 
 
 Get gitawsm using <b>go get</b>
+
 	go get github.com/grasskode/gitawsm
 
 Install
+
 	go install github.com/grasskode/gitawsm
 
 The binary will be generated at **$GOPATH/bin**. You can add **$GOPATH/bin** to your **$PATH** to access gitawsm globally.
@@ -31,10 +33,12 @@ Let's say that the branch affects <code>webapp</code> and <code>api</code> proje
 
 
 One, we switch to the project and add it to the branch.
+
 	cd /path/to/project/webapp
 	gitawsm add feature/analytics
 
 Or, we issue the command globally with project paths.
+
 	gitawsm add feature/analytics /path/to/project/webapp /path/to/project/api
 
 ### List branches and projects
