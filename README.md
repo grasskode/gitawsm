@@ -4,9 +4,16 @@ gitawsm is an awesome extension to git to make branch management easier. A typic
 
 ## Installation
 
-Install using <b>go get</b>
+You will need [golang](https://golang.org/) to install **gitawsm**.
+Install golang using the instructions provided [here](https://golang.org/doc/install). 
 
-<code>go get github.com/grasskode/gitawsm</code>
+Get gitawsm using <b>go get</b>
+	go get github.com/grasskode/gitawsm
+
+Install
+	go install github.com/grasskode/gitawsm
+
+The binary will be generated at **$GOPATH/bin**. You can add **$GOPATH/bin** to your **$PATH** to access gitawsm globally.
 
 ## Usage
 
@@ -15,7 +22,7 @@ A typical use case would be as follows :
 ### Create a new branch
 Execute <code>gitawsm branch</code> from anywhere. Let's say we need to work on a new analytics feature.
 
-<code>gitawsm branch feature/analytics</code>
+	gitawsm branch feature/analytics
 
 This will create a new branch by the name of feature/analytics. Any branch name provided here should be a valid git ref name.
 
@@ -24,13 +31,11 @@ Let's say that the branch affects <code>webapp</code> and <code>api</code> proje
 
 
 One, we switch to the project and add it to the branch.
-
-<code>cd /path/to/project/webapp</code>
-<code>gitawsm add feature/analytics</code>
+	cd /path/to/project/webapp
+	gitawsm add feature/analytics
 
 Or, we issue the command globally with project paths.
-
-<code>gitawsm add feature/analytics /path/to/project/webapp /path/to/project/api</code>
+	gitawsm add feature/analytics /path/to/project/webapp /path/to/project/api
 
 ### List branches and projects
 At any point of time you can check the branches and associated projects using <code>gitawsm list</code>
@@ -42,14 +47,14 @@ At any point of time you can check the branches and associated projects using <c
 ### Checkout branch
 Checkout the gitawsm branch using <code>gitawsm checkout</code>. This will checkout the branch in all projects associated with the branch.
 
-<code>gitawsm checkout feature/analytics</code>
+	gitawsm checkout feature/analytics
 
 ### Push to remote
 Work across projects and once you are ready to push your changes, use <code>gitawsm push</code> to push the branch across all projects.
 
-<code>gitawsm push feature/analytics</code>
+	gitawsm push feature/analytics
 
 ### Pull from upstream
 Update all projects for changes in the upstream using <code>gitawsm pull</code>.
 
-<code>gitawsm pull feature/anaytics</code>
+	gitawsm pull feature/anaytics
