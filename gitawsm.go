@@ -36,8 +36,9 @@ func get_help() string {
 	COMMAND
 		branch 		: Create a new gitawsm branch
  		add 		: Add a git project into a gitawsm branch
- 		checkout 	: Checkout a gitawsm branch
 		list 		: List all gitawsm branches by patterns
+ 		checkout 	: Checkout a gitawsm branch
+		pull		: Pull a gitawsm branch from upstream.
 		push 		: Push a gitawsm branch to configured remotes
 	
 	Run "gitawsm help COMMAND" for detailed help of the gitawsm command
