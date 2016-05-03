@@ -20,13 +20,13 @@ func NewPullCmd(branch string) *PullCmd {
 	}
 }
 
-func (c *PullCmd) help() string {
+func (c *PullCmd) Help() string {
 	return `
 	usage: gitawsm pull <branch_name>
 	`
 }
 
-func (c *PullCmd) run() *result.Result {
+func (c *PullCmd) Run() *result.Result {
 	// check if branch exists
 	branches := utils.ReadBranches()
 	projects, exists := branches[c.branch]

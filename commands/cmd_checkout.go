@@ -20,13 +20,13 @@ func NewCheckoutCmd(branch string) *CheckoutCmd {
 	}
 }
 
-func (c *CheckoutCmd) help() string {
+func (c *CheckoutCmd) Help() string {
 	return `
 	usage: gitawsm checkout <branch_name>
 	`
 }
 
-func (c *CheckoutCmd) run() *result.Result {
+func (c *CheckoutCmd) Run() *result.Result {
 	// check if branch exists
 	branches := utils.ReadBranches()
 	projects, exists := branches[c.branch]

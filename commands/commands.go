@@ -8,8 +8,8 @@ import (
 )
 
 type Command interface {
-	help() string
-	run() *result.Result
+	Help() string
+	Run() *result.Result
 }
 
 func CreateCommand(command string, args []string, parseArgs bool) Command {

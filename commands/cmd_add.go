@@ -24,13 +24,13 @@ func NewAddCmd(branch string, paths []string) *AddCmd {
 	}
 }
 
-func (c *AddCmd) help() string {
+func (c *AddCmd) Help() string {
 	return `
 	usage: gitawsm add <branch_name> [path...]
 	`
 }
 
-func (c *AddCmd) run() *result.Result {
+func (c *AddCmd) Run() *result.Result {
 	// check if branch exists
 	branches := utils.ReadBranches()
 	_, exists := branches[c.branch]

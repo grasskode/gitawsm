@@ -16,11 +16,11 @@ func (c *UnknownCmd) get_message() string {
 	return fmt.Sprintf("Unknown command %q", c.command)
 }
 
-func (c *UnknownCmd) help() string {
+func (c *UnknownCmd) Help() string {
 	return fmt.Sprintf("\n\t%s\n", c.get_message())
 }
 
-func (c *UnknownCmd) run() *result.Result {
+func (c *UnknownCmd) Run() *result.Result {
 	return &result.Result{
 		Success: false,
 		Message: c.get_message(),

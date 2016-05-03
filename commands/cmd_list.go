@@ -19,13 +19,13 @@ func NewListCmd(pattern string) *ListCmd {
 	}
 }
 
-func (c *ListCmd) help() string {
+func (c *ListCmd) Help() string {
 	return `
 	usage: gitawsm list [pattern]
 	`
 }
 
-func (c *ListCmd) run() *result.Result {
+func (c *ListCmd) Run() *result.Result {
 	// read all branches
 	list := make(map[string][]string)
 	branches := utils.ReadBranches()

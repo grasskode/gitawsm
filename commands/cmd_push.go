@@ -20,13 +20,13 @@ func NewPushCmd(branch string) *PushCmd {
 	}
 }
 
-func (c *PushCmd) help() string {
+func (c *PushCmd) Help() string {
 	return `
 	usage: gitawsm push <branch_name>
 	`
 }
 
-func (c *PushCmd) run() *result.Result {
+func (c *PushCmd) Run() *result.Result {
 	// check if branch exists
 	branches := utils.ReadBranches()
 	projects, exists := branches[c.branch]

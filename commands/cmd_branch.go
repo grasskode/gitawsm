@@ -20,13 +20,13 @@ func NewBranchCmd(branch string) *BranchCmd {
 	}
 }
 
-func (c *BranchCmd) help() string {
+func (c *BranchCmd) Help() string {
 	return `
 	usage: gitawsm branch <branch_name>
 	`
 }
 
-func (c *BranchCmd) run() *result.Result {
+func (c *BranchCmd) Run() *result.Result {
 	// check if branch is specified
 	if c.branch == "" {
 		return &result.Result{

@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	commands "github.com/grasskode/gitawsm/commands"
+	"github.com/grasskode/gitawsm/commands"
+	"github.com/grasskode/gitawsm/utils"
 )
 
 func main() {
@@ -15,7 +16,7 @@ func main() {
 		help := get_help()
 		if len(args) > 1 {
 			cmd := commands.CreateCommand(args[1], []string{}, false)
-			help = cmd.help()
+			help = cmd.Help()
 		}
 		fmt.Println(help)
 	} else {
@@ -24,8 +25,8 @@ func main() {
 			command_args = args[1:]
 		}
 		cmd := commands.CreateCommand(args[0], command_args, true)
-		result := cmd.run()
-		Print(fmt.Sprintf("Executed command.\nSuccess : %v\nMessage : %v", result.Success, result.Message))
+		result := cmd.Run()
+		utils.Print(fmt.Sprintf("Executed command.\nSuccess : %v\nMessage : %v", result.Success, result.Message))
 	}
 }
 
