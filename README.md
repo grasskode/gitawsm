@@ -46,7 +46,7 @@ At any point of time you can check the branches and associated projects using <c
 
 <code>gitawsm list</code> will list all branches with associated projects.
 
-<code>gitawsm list "feature.*"</code> will list all branches matching "feature.*" regexp. The regexp should be a valid re2 expression.
+<code>gitawsm list "feature.*"</code> will list all branches matching "feature.*" regexp. The regexp should be a valid [re2 expression](https://github.com/google/re2/wiki/Syntax).
 
 ### Checkout branch
 Checkout the gitawsm branch using <code>gitawsm checkout</code>. This will checkout the branch in all projects associated with the branch.
