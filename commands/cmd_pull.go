@@ -78,17 +78,13 @@ func (c *PullCmd) Run() *result.Result {
 	}
 
 	// check if there are remote branches set as upstream
-	invalid = []string{}
 	for _, p := range projects {
-		utils.GitFetch(p)
-		if utils.GitGetUpstream(p) == "" {
-			invalid = append(invalid, p)
-		}
-	}
-	if len(invalid) > 0 {
-		return &result.Result{
-			Success: false,
-			Message: fmt.Sprintf("The following projects do not have an upstream for the mentioned branch : %v\nPlease ensure that the upstream is configured before using %q.", invalid, "git pull"),
+		err := utils.GitCreateUpstreamIfDoesNotExist(p, c.branch)
+		if err != nil {
+			return &result.Result{
+				Success: false,
+				Message: fmt.Sprintf("Error detecting or setting upstream.\n%s.", err.Error()),
+			}
 		}
 	}
 

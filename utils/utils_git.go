@@ -3,10 +3,12 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os/exec"
 	"strings"
+	"unicode"
 )
 
 func GitIsValidBranchName(branch string) bool {
@@ -45,19 +47,7 @@ func GitIsCleanWorkingTree(path string) bool {
 	return true
 }
 
-func GitCreateBranchIfDoesNotExist(path string, branch string) error {
-	// get list of all remotes
-	rcmd := exec.Command("git", "remote")
-	rcmd.Dir = path
-	rout, rerr := rcmd.Output()
-	if rerr != nil {
-		log.Fatal(fmt.Sprintf("Unable to read git remotes in project %v.\n%s", path, rerr.Error()))
-	}
-	remotes := strings.Split(string(rout), "\n")
-	for i, r := range remotes {
-		remotes[i] = strings.Trim(r, " ")
-	}
-
+func GitGetAllBranches(path string) []string {
 	// get list of all branches
 	bcmd := exec.Command("git", "branch", "-a")
 	bcmd.Dir = path
@@ -69,6 +59,23 @@ func GitCreateBranchIfDoesNotExist(path string, branch string) error {
 	for i, b := range branches {
 		branches[i] = strings.Trim(b, " *")
 	}
+	return branches
+}
+
+func GitCreateBranchIfDoesNotExist(path string, branch string) error {
+	// TODO get list of all remotes
+	// rcmd := exec.Command("git", "remote")
+	// rcmd.Dir = path
+	// rout, rerr := rcmd.Output()
+	// if rerr != nil {
+	// 	log.Fatal(fmt.Sprintf("Unable to read git remotes in project %v.\n%s", path, rerr.Error()))
+	// }
+	// remotes := strings.Split(string(rout), "\n")
+	// for i, r := range remotes {
+	// 	remotes[i] = strings.Trim(r, " ")
+	// }
+
+	branches := GitGetAllBranches(path)
 
 	// check branches
 	for _, b := range branches {
@@ -76,11 +83,9 @@ func GitCreateBranchIfDoesNotExist(path string, branch string) error {
 			// local branch exists
 			return nil
 		}
-		for _, r := range remotes {
-			if b == fmt.Sprintf("remotes/%s/%s", r, branch) {
-				// remote branch exists
-				return nil
-			}
+		if b == fmt.Sprintf("remotes/origin/%s", branch) {
+			// remote branch exists
+			return nil
 		}
 	}
 
@@ -105,7 +110,8 @@ func GitGetBranch(path string) string {
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error getting current branch in project %q.\n%s", path, err.Error()))
 	}
-	return string(branch)
+	branchStr := strings.TrimFunc(string(branch), unicode.IsSpace)
+	return branchStr
 }
 
 func GitFetch(path string) {
@@ -119,17 +125,38 @@ func GitFetch(path string) {
 	}
 }
 
-func GitGetUpstream(path string) string {
+func GitCreateUpstreamIfDoesNotExist(path string, branch string) error {
+	GitFetch(path)
 	cmd := exec.Command("git", "for-each-ref", "--format='%(upstream:short)'", "$(git symbolic-ref -q HEAD)")
 	cmd.Dir = path
 	upstream, err := cmd.Output()
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error getting upstream in project %q.\n%s", path, err.Error()))
 	}
-	return string(upstream)
+	upstreamStr := string(upstream)
+	if upstreamStr != "" {
+		return nil
+	}
+
+	// no upstream exists
+	// look for possible remote branch with same name
+	branches := GitGetAllBranches(path)
+	for _, b := range branches {
+		if b == fmt.Sprintf("remotes/origin/%s", branch) {
+			// remote branch exists. set as upstream.
+			cmd = exec.Command("git", "branch", "-u", fmt.Sprintf("origin/%s", branch))
+			cmd.Dir = path
+			err := cmd.Run()
+			return err
+		}
+	}
+
+	// could not set any branch as remote
+	return errors.New("No upstream set and no remote branch could be identified as possible candidate.")
 }
 
 func GitPull(path string, branch string) error {
+	Print(fmt.Sprintf("Pulling branch %q in project %q.", branch, path))
 	cmd := exec.Command("git", "pull", "origin", branch)
 	cmd.Dir = path
 	output, err := cmd.CombinedOutput()
@@ -138,7 +165,8 @@ func GitPull(path string, branch string) error {
 }
 
 func GitPush(path string, branch string) error {
-	cmd := exec.Command("git", "push", "origin", branch)
+	Print(fmt.Sprintf("Pushing branch %q in project %q.", branch, path))
+	cmd := exec.Command("git", "push", "-u", "origin", branch)
 	cmd.Dir = path
 	output, err := cmd.CombinedOutput()
 	Print(string(output))
